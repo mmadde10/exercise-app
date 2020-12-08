@@ -1,4 +1,5 @@
 var Exercise = require('../models/exercise');
+var User = require('../models/User');
 const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 var async = require('async');
@@ -15,6 +16,12 @@ exports.exercise_list = function(req, res) {
 
 exports.get_exercise_list_by_id = function(req, res){
     Exercise.findById(req.params.id)
+    .then(exercise => res.json(exercise))
+    .catch(err => res.status(400).json('Error: ' + err));
+}
+
+exports.get_user_exercises = function(req, res){
+    Exercise.find({user: req.user._id})
     .then(exercise => res.json(exercise))
     .catch(err => res.status(400).json('Error: ' + err));
 }
@@ -45,18 +52,19 @@ exports.create_exercise = function(req, res){
     const description = req.body.description;
     const duration = Number(req.body.duration);
     const date = Date.parse(req.body.date);
-    const userId = req.body.userId;
+    const user = req.user._id;
   
     const newExercise = new Exercise({
       username,
       description,
       duration,
       date,
+      user
     });
 
-    console.log(newExercise)
-  
+    console.log("new ex: ", newExercise)
+
     newExercise.save()
-    .then(resp => res.json('Exercise added!' + resp))
+    .then(resp => res.json(resp))
     .catch(err => res.status(400).json('Error: ' + err));
 }

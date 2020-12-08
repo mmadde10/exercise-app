@@ -4,7 +4,7 @@ const auth = require('../auth')
 const exerciseController = require('../controllers/exerciseController')
 
 
-router.get('/', exerciseController.exercise_list);
+router.get('/',auth, exerciseController.get_user_exercises);
 
 router.post('/add', auth, exerciseController.create_exercise)
 

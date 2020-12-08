@@ -23,7 +23,8 @@ var userSchema = new Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    exercises: [{ type: Schema.Types.ObjectId, ref: 'Exercise' }]
 });
 
 userSchema.pre('save', function(next){
@@ -60,4 +61,4 @@ userSchema.methods.comparePassword = function(caniddatePassword, checkpassword){
     })
 }
 
-module.exports = mongoose.model('userModel', userSchema);
+module.exports = mongoose.model('User', userSchema);
